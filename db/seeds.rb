@@ -9,10 +9,15 @@
                         name: Faker::Hipster.sentence(word_count: 2), 
                         description: Faker::Hipster.sentence(word_count: 10)
                       ])}
-10.times {User.create([
+10.times { u = User.new(
                         name: Faker::Name.name,
-                        phone: Faker::PhoneNumber.phone_number
-                      ])}
+                        phone: Faker::PhoneNumber.phone_number,
+                        email: Faker::Internet.email,
+                        password: '123456'
+                      )
+                      u.save
+
+          }
 
 Group.first.users << User.limit(5)
 Group.second.users << User.limit(5).offset(5)
