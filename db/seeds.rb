@@ -26,9 +26,11 @@ Group.second.users << User.limit(5).offset(5)
 20.times do
   user = User.all.sample
   group = user.groups.sample
+  multiplier = [-1, 1].sample
   Transaction.create([
-                       amount: Faker::Number.between(from: 500, to: 3000), 
+                       amount: Faker::Number.between(from: 500, to: 3000) * multiplier, 
                        user_id: user.id, 
-                       group_id: group.id
+                       group_id: group.id,
+                       transaction_date: Faker::Date.between(from: 100.days.ago, to: Date.today)
                     ])
 end
