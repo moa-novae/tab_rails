@@ -8,5 +8,8 @@ class User < ApplicationRecord
   has_many :user_groups
   has_many :groups, through: :user_groups
   has_many :transactions
-  validates_presence_of :name, :phone
+  validates_presence_of :name, :phone, :password
+  def email_required?
+    false
+  end
 end
