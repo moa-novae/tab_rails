@@ -6,6 +6,16 @@ class GroupsController < ApplicationController
 
   def show
     @group = Group.find(params[:id])
-    render json: @group
+    if @group.users.include? current_user
+      render json: @group
+    else 
+      render json: { errors: [
+        {
+          status: '401',
+          title: 'Unauthorized',
+        }
+      ]
+    }, status: :bad_request
+    end
   end
 end
