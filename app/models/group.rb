@@ -5,9 +5,13 @@ class Group < ApplicationRecord
   validates_presence_of :name
 
   def as_json(options={})
-    super(include: %i[users transactions],
-          methods: :user_balance
+    if options.key?(:only) or options.key?(:methods) or options.key?(:include) or options.key?(:except)
+      super(options)
+    else
+      super(include: %i[users transactions],
+            methods: :user_balance
     )
+    end
   end
 
   def user_balance

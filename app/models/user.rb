@@ -14,7 +14,11 @@ class User < ApplicationRecord
   end
 
   def as_json (options={})
-    super(methods: %i[user_overall_balance user_group_balance])
+    if options.key?(:only) or options.key?(:methods) or options.key?(:include) or options.key?(:except)
+      super(options)
+    else
+      super(methods: %i[user_overall_balance user_group_balance])
+    end
   end
   
   def user_overall_balance
