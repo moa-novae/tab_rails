@@ -18,4 +18,22 @@ class GroupsController < ApplicationController
     }, status: :bad_request
     end
   end
+
+  def create
+    @group = Group.create(group_params)
+    @members = member_params.map do |member|
+      {user_id: member, group_id: @group.id}
+    end
+    UserGroup.create(@members)
+
+  end
+  private
+  def group_params 
+    params.require(:group).permit(:name, :description)
+  end
+
+  def member_params
+    params.permit(members: [])
+    params.require(:members)
+  end
 end
