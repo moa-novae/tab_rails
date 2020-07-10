@@ -14,6 +14,10 @@ class Group < ApplicationRecord
     end
   end
 
+  def user?(user)
+    users.exists?(user)
+  end
+
   def user_balance
     transactions.reduce(Hash.new(0)) do |sum, transaction|
       user_id = transaction[:user_id]
