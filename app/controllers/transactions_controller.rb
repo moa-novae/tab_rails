@@ -14,11 +14,35 @@ class TransactionsController < ApplicationController
     end
   end
 
+  def show
+    transaction = Transaction.find(params[:id])
+    if transaction.group.user?(current_user.id)
+      render :json => {transaction: transaction}
+    else
+      respond_with_unauthorized
+    end
+  end
+
+
+  def update
+    # if current user belongs in group
+    if Transaction.find(params[:id]).group.user?(current_user.id)
+      Transaction.update(update_params)
+    else 
+      respond_with_unauthorized
+    end
+  end
 
   private
   def transaction_params
     params.require(:transaction).permit(
       :amount, :user_id, :group_id, :transaction_date
+    )
+  end
+
+  def update_params
+    params.require(:transaction).permit(
+      :amount, :transaction_date
     )
   end
 end
