@@ -9,4 +9,6 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     render json: @user.as_json(only: [:name], methods: [:user_overall_balance])
   end
+
+
 end
