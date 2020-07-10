@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
+  include ErrorResponse
   # send current user
   def index
     @user = current_user
@@ -15,13 +16,7 @@ class UsersController < ApplicationController
     if current_user.id == params[:id].to_i
       current_user.update(update_user_params)
     else
-      render json: { errors: [
-        {
-          status: '401',
-          title: 'Unauthorized',
-        }
-      ]
-    }, status: :bad_request
+      respond_with_unauthorized
     end
   end
 

@@ -1,5 +1,6 @@
 class GroupsController < ApplicationController
   before_action :authenticate_user!
+  include ErrorResponse
   def index
     render json: {groups: current_user.groups}
   end
@@ -9,13 +10,7 @@ class GroupsController < ApplicationController
     if @group.users.include? current_user
       render json: @group
     else 
-      render json: { errors: [
-        {
-          status: '401',
-          title: 'Unauthorized',
-        }
-      ]
-    }, status: :bad_request
+      respond_with_unauthorized
     end
   end
 

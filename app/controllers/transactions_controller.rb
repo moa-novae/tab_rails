@@ -1,5 +1,6 @@
 class TransactionsController < ApplicationController
   before_action :authenticate_user!
+  include ErrorResponse
   def index
     render :json => {transactions: current_user.transactions}
   end
@@ -9,13 +10,7 @@ class TransactionsController < ApplicationController
     if Group.find(transaction_params[:group_id]).user?(transaction_params[:user_id])
       Transaction.create(transaction_params)
     else 
-      render json: { errors: [
-        {
-          status: '401',
-          title: 'Unauthorized',
-        }
-      ]
-    }, status: :bad_request
+      respond_with_unauthorized
     end
   end
 
