@@ -2,7 +2,7 @@ class Group < ApplicationRecord
   has_many :user_groups
   has_many :users, through: :user_groups
   has_many :transactions
-  validates_presence_of :name
+  validates_presence_of :name, on: :create
 
   def as_json(options={})
     if options.key?(:only) or options.key?(:methods) or options.key?(:include) or options.key?(:except)

@@ -14,7 +14,8 @@ class UsersController < ApplicationController
 
   def update
     if current_user.id == params[:id].to_i
-      current_user.update(update_user_params)
+      # reject update if value blank
+      current_user.update(update_user_params.reject{|_, v| v.blank?})
     else
       respond_with_unauthorized
     end
