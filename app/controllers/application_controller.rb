@@ -21,6 +21,4 @@ class ApplicationController < ActionController::API
       ]
     }, status: :bad_request
   end
-
-  
 end

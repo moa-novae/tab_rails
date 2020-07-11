@@ -9,7 +9,7 @@ class GroupsController < ApplicationController
     @group = Group.find(params[:id])
     if @group.users.include? current_user
       render json: @group
-    else 
+    else
       respond_with_unauthorized
     end
   end
@@ -20,15 +20,29 @@ class GroupsController < ApplicationController
       {user_id: member, group_id: @group.id}
     end
     UserGroup.create(@members)
-
   end
+
+  def update
+    # only allow update if user belongs in group
+    @group = Group.find(params[:id])
+    if @group.user?(current_user.id)
+      @group.update(update_params)
+    else 
+      respond_with_unauthorized
+    end
+  end
+
   private
-  def group_params 
+  def group_params
     params.require(:group).permit(:name, :description)
   end
 
   def member_params
     params.permit(members: [])
     params.require(:members)
+  end
+  
+  def update_params
+    params.require(:group).permit(:name, :description)
   end
 end
