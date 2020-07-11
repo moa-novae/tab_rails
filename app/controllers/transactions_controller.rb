@@ -33,6 +33,15 @@ class TransactionsController < ApplicationController
     end
   end
 
+  def destroy 
+    @transaction = Transaction.find(params[:id])
+    if @transaction.group.user?(current_user.id)
+      @transaction.delete 
+    else 
+      respond_with_unauthorized
+    end
+  end
+
   private
   def transaction_params
     params.require(:transaction).permit(

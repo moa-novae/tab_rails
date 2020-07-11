@@ -32,6 +32,15 @@ class GroupsController < ApplicationController
     end
   end
 
+  def destroy 
+    @group = Group.find(params[:id])
+    if @group.user?(current_user.id)
+      @group.delete 
+    else 
+      respond_with_unauthorized
+    end
+  end
+
   private
   def group_params
     params.require(:group).permit(:name, :description)
@@ -41,7 +50,7 @@ class GroupsController < ApplicationController
     params.permit(members: [])
     params.require(:members)
   end
-  
+
   def update_params
     params.require(:group).permit(:name, :description)
   end
