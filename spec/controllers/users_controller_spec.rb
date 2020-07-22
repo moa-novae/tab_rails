@@ -1,18 +1,19 @@
 require 'rails_helper'
-require 'devise/jwt/test_helpers'
+require_relative '../support/auth_helpers.rb'
+
+RSpec.configure do |c|
+  c.include AuthHelpers
+end
 
 RSpec.describe UsersController do 
   describe "GET #index" do 
     context 'with correct authorization header' do
       before do 
-        user = User.create(
-          name: 'Name',
-          phone: '1234567890',
-          password: '123456')
-        headers = { 'Accept' => 'application/json', 'Content-Type' => 'application/json' }
-        # This will add a valid token for `user` in the `Authorization` header
-        auth_headers = Devise::JWT::TestHelpers.auth_headers(headers, user)
-        auth_headers.each do |k, v|
+        user = User.all.first
+        headers = configure_auth_headers(user)
+        # set headers, note that setting headers in controller
+        # is different than request spec
+        headers.each do |k, v|
           request.headers[k] = v
         end
         get :index

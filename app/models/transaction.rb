@@ -8,9 +8,9 @@ class Transaction < ApplicationRecord
   end
 
   def send_overdraft_sms (amount, user, group)
-    p 'sent'
     balance = user.user_group_balance[group.id]
     if balance < -10_000
+      p 'sent'
       account_sid = ENV['TWILIO_SID']
       auth_token = ENV['TWILIO_TOKEN']
       client = Twilio::REST::Client.new(account_sid, auth_token)

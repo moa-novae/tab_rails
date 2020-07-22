@@ -20,6 +20,9 @@ class GroupsController < ApplicationController
       {user_id: member, group_id: @group.id}
     end
     UserGroup.create(@members)
+    # respond with 201 and location header
+    response.set_header('Location', "/api/groups/#{@group.id}")
+    render json: @group, status: :created
   end
 
   def update
